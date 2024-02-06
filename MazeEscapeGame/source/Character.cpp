@@ -14,7 +14,7 @@ extern "C" {
 
 
 Character::Character(uint16_t x_Pos, uint16_t y_Pos, uint16_t charSize) :
-	xPos(x_Pos), yPos(y_Pos), size(charSize)
+	xPos(x_Pos), yPos(y_Pos), size(charSize), winStatus(false),colisionNumber(0)
 {
 
 }
@@ -32,7 +32,7 @@ void Character::move()
 	for (int i = 0; i < std::abs(xSpeed); i++)
 	{
 		direction = (xSpeed > 0) ? 1 : -1;
-		if(getColision(xPos + direction, yPos,0xFFE0))
+		if(getColision(xPos + direction, yPos,0xFFE0,0x051d))
 		{
 			break;
 		}
@@ -49,7 +49,7 @@ void Character::move()
 	for (int i = 0; i < std::abs(ySpeed); i++)
 	{
 		direction = (ySpeed > 0) ? 1 : -1;
-		if(getColision(xPos, yPos + direction,0xFFE0))
+		if(getColision(xPos, yPos + direction,0xFFE0,0x051d))
 		{
 			break;
 		}
@@ -65,11 +65,15 @@ void Character::move()
 
 
 
-bool Character::getColision( int16_t futureX, int16_t futureY,uint16_t color) {
+bool Character::getColision( int16_t futureX, int16_t futureY,uint16_t color, uint16_t winColor) {
 	for (uint16_t i = futureX; i <= futureX+size; i++) {
 		for (uint16_t j = futureY; j <= futureY+size; j++) {
 			if(LCD_Get_Point(i,j) == color){
 				colisionNumber++;
+				return true;
+			}
+			if(LCD_Get_Point(i,j) == winColor){
+				winStatus = true;
 				return true;
 			}
 		}
@@ -112,6 +116,10 @@ uint16_t Character::getSize() const
 uint16_t Character::getColisionNumber() const
 {
     return colisionNumber;
+}
+bool Character::getWinStatus() const
+{
+	return winStatus;
 }
 
 void Character::setXPos(uint16_t xPos) 

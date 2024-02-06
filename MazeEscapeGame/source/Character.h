@@ -24,23 +24,23 @@ public:
 	int16_t getYSpeed() const;
 	uint16_t getSize() const;
 	uint16_t getColisionNumber() const;
-
-	
-	
+	bool getWinStatus() const;
 	JoyStick joyStick; // możesz raczej to poprawić umiejscowienie może jakis getter czy inny wzorzec
 
 private:
 	void setXPos(uint16_t xPos); //nie wiem czy potrzebuje tego 
 	void setYPos(uint16_t yPos); //nie wiem czy potrzebuje tego
 
-	bool getColision(int16_t xPos, int16_t yPos,uint16_t color);
+	bool getColision(int16_t xPos, int16_t yPos,uint16_t color, uint16_t winColor);
 	void updateSpeed();
 
+	uint16_t colisionNumber;
+	bool winStatus;
 	uint16_t xPos, yPos;
 	int16_t xSpeed, ySpeed;
 	uint16_t size;
-	uint16_t colisionNumber;
-	
+
+
 };
 
 #endif /* CHARACTER_H_ */

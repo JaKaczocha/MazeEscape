@@ -26,6 +26,20 @@ void setCursor(uint16_t x, uint16_t y, uint16_t size, uint16_t color) {
 	LCD_Draw_FillRect(x,y,x+size,y+size, color);
 }
 
+bool getWin( int16_t futureX, int16_t futureY,uint16_t size, uint16_t color) {
+	for (uint16_t i = futureX; i <= futureX+size; i++) {
+		for (uint16_t j = futureY; j <= futureY+size; j++) {
+			if(LCD_Get_Point(i,j) == color){
+				
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+
 /*
  * @brief Application entry point.
  */
@@ -44,14 +58,16 @@ int main(void) {
 	BOARD_InitDebugConsole();
 #endif
 
-	Character character(50,50,5);
+	Character character(55,50,5);
 	Map map(back_160x128,160,128);
 
 	LCD_Init(FLEXCOMM3_PERIPHERAL);
 
-	constexpr int bufferSize = 40;
-	char buffer[bufferSize];
+	constexpr int bufferSize = 60;
+	constexpr int floatBufferSize = 10;
 
+	char buffer[bufferSize];
+	char floatBuffer[floatBufferSize];
 
 	while(1) {
 		if(character.joyStick.isReady()) {
@@ -62,17 +78,28 @@ int main(void) {
 
 			LCD_Set_Bitmap(map.getMap());
 
-			colCounter= character.getColisionNumber();
-
 			setCursor(coursorX, coursorY, 5, 0xF800);
+			
+			if(!character.getWinStatus())
+			{
+				colCounter= character.getColisionNumber();
+			}
+			
 			LCD_7seg( 10, 2, colCounter, 5, 0xF800);
 
 			// lcd debug
-			if(debugON) {
-				snprintf(buffer, bufferSize, "X:%3d Xspd:%2d", coursorX, character.getXSpeed());
-				LCD_Puts(2,5,buffer,0xffffff);
-				snprintf(buffer, bufferSize, "Y:%3d Yspd:%2d", coursorY, character.getYSpeed());
-				LCD_Puts(2,15,buffer,0xffffff);
+			if (debugON)
+			{
+
+			    snprintf(buffer, sizeof(buffer), "X:%3d Xspd:%2d cC:%d", coursorX, character.getXSpeed(),colCounter);
+			    LCD_Puts(2, 5, buffer, 0xffffff);
+
+
+			    snprintf(buffer, sizeof(buffer), "Y:%3d Yspd:%2d", coursorY, character.getYSpeed());
+			    LCD_Puts(2, 15, buffer, 0xffffff);
+
+			    snprintf(buffer, sizeof(buffer), "Xax:%5d Yax:%5d ",  character.joyStick.getJoyAxisX(),character.joyStick.getJoyAxisY());
+			    LCD_Puts(2, 25, buffer, 0xffffff);
 			}
 
 
