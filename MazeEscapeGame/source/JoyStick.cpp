@@ -2,20 +2,18 @@
 #include <JoyStick.h>
 
 
+static JoyStick *joyStickInstance = nullptr; // Globalna zmienna wskazująca na instancję JoySticka
+
 JoyStick::JoyStick() {
     // TODO Auto-generated constructor stub
+	joyStickInstance = this; // Przypisz wskaźnik na instancję JoySticka
 }
 
 JoyStick::~JoyStick() {
     // TODO Auto-generated destructor stub
 }
 
-static JoyStick *joyStickInstance = nullptr; // Globalna zmienna wskazująca na instancję JoySticka
 
-
-void JoyStick::initialize() {
-    joyStickInstance = this; // Przypisz wskaźnik na instancję JoySticka
-}
 
 extern "C" {
     void ADC0_IRQHANDLER(void) {
@@ -25,11 +23,11 @@ extern "C" {
     }
 }
 
-uint16_t JoyStick::getJoyAxisX() const {
+int JoyStick::getJoyAxisX() const {
 	return this->joyAxisX;
 }
 
-uint16_t JoyStick::getJoyAxisY() const {
+int JoyStick::getJoyAxisY() const {
 	return this->joyAxisY;
 }
 bool JoyStick::isReady() const {

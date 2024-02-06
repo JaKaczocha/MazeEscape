@@ -363,7 +363,7 @@ void LCD_Clear(uint16_t color) {
 	}
 }
 
-void LCD_Set_Bitmap(uint16_t *data) {
+void LCD_Set_Bitmap( const uint16_t *data) {
 
 	for(int i=0; i<LCD_WIDTH*LCD_HEIGHT; i++) {
 

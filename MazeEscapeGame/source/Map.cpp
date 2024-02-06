@@ -7,12 +7,20 @@
 
 #include <Map.h>
 
-Map::Map() {
-	// TODO Auto-generated constructor stub
 
+
+Map::Map(const uint16_t* array2D, uint16_t numberOfRows, uint16_t numberOfCols) : numRows(numRows), numCols(numCols), map(array2D)
+{
+	
 }
 
-Map::~Map() {
-	// TODO Auto-generated destructor stub
+
+Map::~Map()
+{
+    
 }
 
+const uint16_t* Map::getMap() const
+{
+    return map;
+}

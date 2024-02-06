@@ -14,19 +14,18 @@ public:
     JoyStick();
     virtual ~JoyStick();
 
-    void initialize(); // Dodaj tę metodę, aby inicjalizować ustawienia JoySticka
 
     void ADC_IRQ_Handler();
 
-    uint16_t getJoyAxisX() const;
-    uint16_t getJoyAxisY() const;
+    int getJoyAxisX() const;
+    int getJoyAxisY() const;
     bool isReady() const;
     void setReady(bool ready);
     bool isJoySw() const;
 
 private:
     lpadc_conv_result_t g_LpadcResultConfigStruct;
-    volatile uint16_t joyAxisX = 0, joyAxisY = 0;
+    volatile int joyAxisX = 0, joyAxisY = 0;
     volatile bool joySw = false;
     volatile bool ready = false;
 };
